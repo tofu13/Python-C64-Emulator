@@ -1,20 +1,21 @@
-
-
 class Memory(object):
 
     def __init__(self):
-        self.memory = {}  # allocate 65kb memory
-    
+        self.size = 65536
+        self.memory = {}
+
     def write(self, address, value):
-        if address < 0 or address > 2**16:
+        if address < 0 or address > self.size:
             raise Exception("Address out of range: " + address)
-        if not isinstance(value, int) or value < 0 or value > 255:
-            raise Exception("Wrong Value: " + str(value))
+        elif not isinstance(value, int):
+            raise TypeError(f"Value must be int, not {type(value)}")
+        elif value < 0 or value > 255:
+            raise ValueError(f"Value {value} is outside bounds (0-255)")
         self.memory[address] = value
     
     def read(self, address):
-        if address < 0 or address > 2**16:
-            raise Exception("Address out of range: " + str(address))
+        if address < 0 or address > self.size:
+            raise ValueError(f"Address out of range: {address}")
         if not address in self.memory:
             return 0
         

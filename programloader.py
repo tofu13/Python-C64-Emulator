@@ -6,12 +6,11 @@ class ProgramLoader(object):
         self.memory = memory
     
     def load_file(self, path):
-        f = open(path, "r")
-        data = f.read()
-        f.close()
-        
+        with open(path, "rb") as f:
+            data = f.read()
+
         address = struct.unpack('H', data[:2])[0]
         
         for byte in data[2:]:
-            self.memory.write(address, struct.unpack('B', byte)[0])
+            self.memory.write(address, struct.unpack('B', bytes([byte]))[0])
             address += 1
