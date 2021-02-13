@@ -53,19 +53,19 @@ class CPU(object):
             self.execute(instr)
         
     def fetch(self):
-        data = self.memory.read(self.PC.get())
+        data = self.memory[self.PC.get()]
         mnem, arg_type, size = instruction_set[data]
         instruction = {'mnem': mnem, 'arg': arg_type}
         
         # fetch instruction with argument
         if size == 1:
             self.PC.inc()
-            data = self.memory.read(self.PC.get())
+            data = self.memory[self.PC.get()]
         elif size == 2:
             self.PC.inc()
-            val1 = self.memory.read(self.PC.get())
+            val1 = self.memory[self.PC.get()]
             self.PC.inc()
-            val2 = self.memory.read(self.PC.get())
+            val2 = self.memory[self.PC.get()]
             data = val2*256+val1
         
         # resolve arguments to real address or value
@@ -102,7 +102,7 @@ class CPU(object):
                 instruction['address'] = data
         
         if 'address' in instruction:
-            instruction['value'] = self.memory.read(instruction['address'])
+            instruction['value'] = self.memory[instruction['address']]
         return instruction
         
     def execute(self, instr):
